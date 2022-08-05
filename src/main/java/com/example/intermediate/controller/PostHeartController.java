@@ -23,6 +23,11 @@ public class PostHeartController {
                                       @AuthenticationPrincipal UserDetails userDetails){
         PostHeart postHeart = postHeartService.createPostHeart(requestDto,userDetails);
 
+        if (postHeart == null) {
+            return ResponseDto.fail("POST_HEART_EXIST",
+                    "같은 게시글에 좋아요를 중복하여 누를 수 없습니다.");
+        }
+
         return ResponseDto.success(postHeart);
     }
 
