@@ -36,6 +36,10 @@ public class PostHeartService {
              throw new IllegalArgumentException("회원이 아닙니다");
          }
 
+         if(!userDetails.getUsername().equals(membercheck.get().getNickname())){
+             throw new IllegalArgumentException("일치하는 회원이 아닙니다");
+         }
+
 
         // 사용자가 같은 게시글에 중복으로 눌렀는지 검사
         Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPostIdAndMemberId(
