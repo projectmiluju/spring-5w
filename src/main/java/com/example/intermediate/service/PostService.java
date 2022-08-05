@@ -9,8 +9,10 @@ import com.example.intermediate.domain.Member;
 import com.example.intermediate.domain.Post;
 import com.example.intermediate.jwt.TokenProvider;
 import com.example.intermediate.repository.CommentRepository;
+import com.example.intermediate.repository.PostHeartRepository;
 import com.example.intermediate.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final PostHeartRepository postHeartRepository;
 
     private final TokenProvider tokenProvider;
 
@@ -85,6 +88,8 @@ public class PostService {
             );
         }
 
+        int postHeartCount = postHeartRepository.findByPostId(id).size();
+
         return ResponseDto.success(
                 PostResponseDto.builder()
                         .id(post.getId())
@@ -92,6 +97,7 @@ public class PostService {
                         .content(post.getContent())
                         .commentResponseDtoList(commentResponseDtoList)
                         .author(post.getMember().getNickname())
+                        .postHeartCount(postHeartCount)
                         .createdAt(post.getCreatedAt())
                         .modifiedAt(post.getModifiedAt())
                         .build()

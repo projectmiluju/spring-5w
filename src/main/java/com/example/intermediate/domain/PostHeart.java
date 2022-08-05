@@ -1,5 +1,6 @@
 package com.example.intermediate.domain;
 
+import com.example.intermediate.controller.request.PostHeartRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,8 +23,8 @@ public class PostHeart extends Timestamped {
    // @ManyToOne(fetch = FetchType.LAZY)
     private Long postId;
 
-    public PostHeart(Long memberId, Long postId) {
-        this.memberId = memberId;
-        this.postId = postId;
+    public PostHeart(PostHeartRequestDto requestDto) {
+        this.memberId = requestDto.getMemberId();
+        this.postId = requestDto.getPostId();
     }
 }

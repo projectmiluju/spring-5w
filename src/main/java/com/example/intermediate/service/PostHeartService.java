@@ -17,7 +17,11 @@ public class PostHeartService {
     private final PostHeartRepository postHeartRepository;
 
     public PostHeart createPostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
+        // 게시글이 존재하는 지 여부
 
+
+
+        // 사용자가 같은 게시글에 중복으로 눌렀는지 검사
         Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPostIdAndMemberId(
                 requestDto.getPostId(), requestDto.getMemberId());
 
@@ -25,7 +29,7 @@ public class PostHeartService {
             return null;
         }
 
-        PostHeart postHeart = new PostHeart(requestDto.getPostId(), requestDto.getMemberId());
+        PostHeart postHeart = new PostHeart(requestDto);
 
         return postHeartRepository.save(postHeart);
     }
