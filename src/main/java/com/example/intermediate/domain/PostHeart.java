@@ -14,11 +14,16 @@ public class PostHeart extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "member_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+   // @JoinColumn(name = "member_id", nullable = false)
+   // @ManyToOne(fetch = FetchType.LAZY)
+    private Long memberId;
 
-    @JoinColumn(name = "post_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Post post;
+   // @JoinColumn(name = "post_id", nullable = false)
+   // @ManyToOne(fetch = FetchType.LAZY)
+    private Long postId;
+
+    public PostHeart(Long memberId, Long postId) {
+        this.memberId = memberId;
+        this.postId = postId;
+    }
 }
