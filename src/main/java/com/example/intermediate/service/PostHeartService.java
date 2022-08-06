@@ -24,7 +24,7 @@ public class PostHeartService {
 
     private final MemberRepository memberRepository;
 
-    public PostHeart createPostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
+    public ResponseDto<?> createPostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
         // 게시글이 존재하는 지 여부
          Optional<Post> postCheck = postRepository.findById(requestDto.getPostId());
          if(postCheck.isEmpty()){
@@ -36,23 +36,23 @@ public class PostHeartService {
          if (membercheck.isEmpty()){
              throw new IllegalArgumentException("회원이 아닙니다");
          }
-
+        //회원이 일치하는지 확인하기
          if(!userDetails.getUsername().equals(membercheck.get().getNickname())){
              throw new IllegalArgumentException("일치하는 회원이 아닙니다");
          }
-
 
         // 사용자가 같은 게시글에 중복으로 눌렀는지 검사
         Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPostIdAndMemberId(
                 requestDto.getPostId(), requestDto.getMemberId());
 
-        if (optionalPostHeart.isPresent()) {
-            throw new IllegalArgumentException("좋아요를 누르셨습니다!");
+        if (!optionalPostHeart.isPresent()) {
+            PostHeart postHeart = new PostHeart(requestDto);
+            postHeartRepository.save(postHeart);
+            return ResponseDto.success("좋아요를 등록했습니다.");
         }
 
-        PostHeart postHeart = new PostHeart(requestDto);
 
-        return postHeartRepository.save(postHeart);
+        return ResponseDto.fail("BAD_REQUEST", "좋아요 등록이 실패하였습니다.");
     }
 
     public ResponseDto<?> deletePostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
