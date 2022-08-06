@@ -2,13 +2,15 @@ package com.example.intermediate.controller;
 
 import com.example.intermediate.controller.request.SubCommentRequestDto;
 import com.example.intermediate.controller.response.ResponseDto;
-import com.example.intermediate.repository.SubCommentRepository;
 import com.example.intermediate.service.SubCommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
+
+@Validated
 @RestController
 @RequiredArgsConstructor
 public class SubCommentController {
@@ -21,5 +23,11 @@ public class SubCommentController {
             @RequestBody SubCommentRequestDto requestDto
     ) {
         return subCommentService.getAllSubCommentsByCommentId(requestDto);
+    }
+
+    @RequestMapping(value = "/api/auth/subcomment", method = RequestMethod.POST)
+    public ResponseDto<?> createSubComment(@RequestBody SubCommentRequestDto requestDto,
+                                        HttpServletRequest request) {
+        return subCommentService.createSubComment(requestDto, request);
     }
 }
