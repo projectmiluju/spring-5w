@@ -11,6 +11,7 @@ import com.example.intermediate.jwt.TokenProvider;
 import com.example.intermediate.repository.CommentRepository;
 import com.example.intermediate.repository.SubCommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,10 +71,6 @@ public class SubCommentService {
         );
     }
 
-
-
-
-
     // 댓글에 달린 전체 대댓글 조회
     public ResponseDto<?> getAllSubCommentsByCommentId(SubCommentRequestDto requestDto) {
         // requestDto를 통해 넘어온 commentId를 이용하여 Comment가 존재하는지 확인
@@ -102,29 +99,39 @@ public class SubCommentService {
         return ResponseDto.success(responseDtoList);
     }
 
-    
 
     //대댓글 수정메서드
-    public ResponseDto<?> updateSubComment(Long id, SubCommentRequestDto requestDto, HttpServletRequest request) {
+    public ResponseDto<?> updateSubComment(Long subCommentId, SubCommentRequestDto requestDto, HttpServletRequest request) {
         //헤더에 리프레쉬토큰값이 없을떄
-        if(null == request.getHeader("Refresh-Token")){ //HttpServletRequest 에 refresh token이 없으면 트루
+        if (null == request.getHeader("Refresh-Token")) { //HttpServletRequest 에 refresh token이 없으면 트루
             throw new IllegalArgumentException("로그인이 필요합니다");
         }
         //헤더에
-        if(null == request.getHeader("Authorization")){ //HttpServletRequest 에 Authorization(Acees토큰)이 없으면 트루
+        if (null == request.getHeader("Authorization")) { //HttpServletRequest 에 Authorization(Acees토큰)이 없으면 트루
             throw new IllegalArgumentException("로그인이 필요합니다");
         }
-        // 댓글DB에 commentId가 있는지 확인
-        Optional<Comment> optionalComment = commentRepository.findBycommentId(id);
-        if(optionalComment.isEmpty()){ //commentId로 검색한 commentDB에 데이터가 없으면 true
-            throw new IllegalArgumentException("댓글이 없습니다"); //Exception 발생
+        // 작성자가 데이터베이스에 있는지
+        Member member = validateMember(request);
+        if (null == member) {
+            throw new IllegalArgumentException("Token이 유효하지 않습니다.");
         }
         // 대댓글 db에서 commentId값이 있는지 확인
-        Optional<SubComment> subComment = subCommentRepository.findById(id); //
-        subComment.get().update(requestDto); // requestDto에 있는 값을 대댓글DB에 수정
+        SubComment subComment = subCommentRepository.findById(subCommentId)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("대댓글이 존재하지 않습니다.")
+                );
+
+        // 작성자가 일치하는지 검증
+        if (member.getId() != subComment.getMember().getId()) {
+            throw new IllegalArgumentException("다른 사용자의 대댓글을 수정하실 수 없습니다.");
+        }
+
+        subComment.update(requestDto); // requestDto에 있는 값을 대댓글DB에 수정
+
+        subCommentRepository.save(subComment);
 
 
-        SubCommentResponseDto responseDto = new SubCommentResponseDto(subComment.get()); //대댓글 리스폰스객체에 subComment데이터 보냄
+        SubCommentResponseDto responseDto = new SubCommentResponseDto(subComment); //대댓글 리스폰스객체에 subComment데이터 보냄
         return ResponseDto.success(responseDto); //수정된 데이터가 있는 responseDTO에 저장후 리턴
     }
 
