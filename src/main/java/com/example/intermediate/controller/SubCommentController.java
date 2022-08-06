@@ -30,4 +30,13 @@ public class SubCommentController {
                                         HttpServletRequest request) {
         return subCommentService.createSubComment(requestDto, request);
     }
+
+    // 대댓글 수정
+   @PutMapping("/api/auth/sub-comment/{id}") //대댓글의 url주소
+    public ResponseDto<?> updateSubComment(@PathVariable Long id, @RequestBody SubCommentRequestDto requestDto,
+                                           HttpServletRequest request){ //url id값을 받고 ,리퀘스트바디에 값을 requestDto에 저장
+                                        //header에 있는 토큰 값을 저장
+       //service에 있는 메서드로 id,requestdto,request 값을 보냄
+       return subCommentService.updateSubComment(id,requestDto,request);
+   }
 }
