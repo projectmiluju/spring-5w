@@ -35,6 +35,7 @@ public class Comment extends Timestamped {
     @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubComment> subComments = new ArrayList<>();
 
+
     public void update(CommentRequestDto commentRequestDto) {
         this.content = commentRequestDto.getContent();
     }

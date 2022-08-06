@@ -1,6 +1,5 @@
 package com.example.intermediate.domain;
 
-import com.example.intermediate.controller.request.CommentRequestDto;
 import com.example.intermediate.controller.request.SubCommentRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +34,7 @@ public class SubComment extends Timestamped {
         this.content = subCommentRequestDto.getContent();
     }
 
-//    public boolean validateMember(Member member) {
-//        return !this.member.equals(member);
-//    }
+    public boolean validateMember(Member member) {
+        return !this.member.equals(member);
+    }
 }
