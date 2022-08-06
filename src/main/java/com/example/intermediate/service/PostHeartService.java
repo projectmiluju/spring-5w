@@ -55,12 +55,22 @@ public class PostHeartService {
     }
 
     public String deletePostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
+
         Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPostIdAndMemberId(
                 requestDto.getPostId(), requestDto.getMemberId());
-        if (optionalPostHeart.isPresent()) {
+        if (optionalPostHeart.isPresent()){
+
+            Optional<Member> membercheck = memberRepository.findById(requestDto.getMemberId());
+
+            if(!userDetails.getUsername().equals(membercheck.get().getNickname())){
+                throw new IllegalArgumentException("일치하는 회원이 아닙니다");
+            }
+
             postHeartRepository.delete(optionalPostHeart.get());
+
             return "success";
         }
+
         return "fail";
     }
 }
