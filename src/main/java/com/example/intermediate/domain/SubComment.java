@@ -19,12 +19,12 @@ public class SubComment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "member_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false) //연관관계
+    @ManyToOne(fetch = FetchType.LAZY) // 맴버하나에 대댓글 여러개
     private Member member;
 
-    @JoinColumn(name = "comment_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id", nullable = false) //연관관계
+    @ManyToOne(fetch = FetchType.LAZY) //댓글 하나에 대댓글 여러개
     private Comment comment;
 
     @Column(nullable = false)

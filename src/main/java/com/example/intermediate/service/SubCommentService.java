@@ -1,5 +1,6 @@
 package com.example.intermediate.service;
 
+
 import com.example.intermediate.controller.request.SubCommentRequestDto;
 import com.example.intermediate.controller.response.ResponseDto;
 import com.example.intermediate.controller.response.SubCommentResponseDto;
@@ -16,14 +17,18 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SubCommentService {
 
-    private final SubCommentRepository subCommentRepository;
+    private final SubCommentRepository subCommentRepository; //대댓글 레포지토리 생성
 
-    private final TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider; //토큰을 생성하는
+
+    private final CommentRepository commentRepository; //댓글 레포지토리 생성
+
     private final CommentService commentService;
 
     @Transactional
@@ -65,15 +70,9 @@ public class SubCommentService {
         );
     }
 
-    @Transactional
-    public Member validateMember(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
-            return null;
-        }
-        return tokenProvider.getMemberFromAuthentication();
-    }
 
-    private final CommentRepository commentRepository;
+
+
 
     // 댓글에 달린 전체 대댓글 조회
     public ResponseDto<?> getAllSubCommentsByCommentId(SubCommentRequestDto requestDto) {
@@ -102,4 +101,39 @@ public class SubCommentService {
 
         return ResponseDto.success(responseDtoList);
     }
+
+    
+
+    //대댓글 수정메서드
+    public ResponseDto<?> updateSubComment(Long id, SubCommentRequestDto requestDto, HttpServletRequest request) {
+        //헤더에 리프레쉬토큰값이 없을떄
+        if(null == request.getHeader("Refresh-Token")){ //HttpServletRequest 에 refresh token이 없으면 트루
+            throw new IllegalArgumentException("로그인이 필요합니다");
+        }
+        //헤더에
+        if(null == request.getHeader("Authorization")){ //HttpServletRequest 에 Authorization(Acees토큰)이 없으면 트루
+            throw new IllegalArgumentException("로그인이 필요합니다");
+        }
+        // 댓글DB에 commentId가 있는지 확인
+        Optional<Comment> optionalComment = commentRepository.findBycommentId(id);
+        if(optionalComment.isEmpty()){ //commentId로 검색한 commentDB에 데이터가 없으면 true
+            throw new IllegalArgumentException("댓글이 없습니다"); //Exception 발생
+        }
+        // 대댓글 db에서 commentId값이 있는지 확인
+        Optional<SubComment> subComment = subCommentRepository.findById(id); //
+        subComment.get().update(requestDto); // requestDto에 있는 값을 대댓글DB에 수정
+
+
+        SubCommentResponseDto responseDto = new SubCommentResponseDto(subComment.get()); //대댓글 리스폰스객체에 subComment데이터 보냄
+        return ResponseDto.success(responseDto); //수정된 데이터가 있는 responseDTO에 저장후 리턴
+    }
+
+    @Transactional
+    public Member validateMember(HttpServletRequest request) {
+        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+            return null;
+        }
+        return tokenProvider.getMemberFromAuthentication();
+    }
+
 }
