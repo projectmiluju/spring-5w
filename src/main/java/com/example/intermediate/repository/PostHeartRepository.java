@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostHeartRepository extends JpaRepository<PostHeart, Long> {
-    Optional<PostHeart> findByPostIdAndMemberId(Long postId,Long memberId );
+    Optional<PostHeart> findByPostIdAndMemberId(Long postId, Long memberId);
+
     List<PostHeart> findByPostId(Long postId);
+
+    long countByPostId(Long postId);
 }

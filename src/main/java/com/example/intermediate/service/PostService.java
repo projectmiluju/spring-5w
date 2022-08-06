@@ -2,6 +2,7 @@ package com.example.intermediate.service;
 
 import com.example.intermediate.controller.request.PostRequestDto;
 import com.example.intermediate.controller.response.CommentResponseDto;
+import com.example.intermediate.controller.response.PostListResponseDto;
 import com.example.intermediate.controller.response.PostResponseDto;
 import com.example.intermediate.controller.response.ResponseDto;
 import com.example.intermediate.domain.Comment;
@@ -106,7 +107,23 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public ResponseDto<?> getAllPost() {
-        return ResponseDto.success(postRepository.findAllByOrderByModifiedAtDesc());
+        // 전체 포스트
+        List<Post> allByOrderByModifiedAtDesc = postRepository.findAllByOrderByModifiedAtDesc();
+        // 요구사항에 맞게 리턴할 리스트 선언
+        List<PostListResponseDto> dtoList = new ArrayList<>();
+
+        for (Post post : allByOrderByModifiedAtDesc) {
+            // 게시글 아이디
+            Long postId = post.getId();
+            // 좋아요 개수 세기
+            long postHeartCount = postHeartRepository.countByPostId(postId);
+            // 요구사항에 맞는 ResponseDto로 변환
+            PostListResponseDto postListResponseDto = new PostListResponseDto(post, postHeartCount);
+            // 결과 저장 리스트에 담기
+            dtoList.add(postListResponseDto);
+        }
+
+        return ResponseDto.success(dtoList);
     }
 
     @Transactional
