@@ -44,15 +44,14 @@ public class PostHeartService {
         // 사용자가 같은 게시글에 중복으로 눌렀는지 검사
         Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPostIdAndMemberId(
                 requestDto.getPostId(), requestDto.getMemberId());
-
-        if (!optionalPostHeart.isPresent()) {
-            PostHeart postHeart = new PostHeart(requestDto);
-            postHeartRepository.save(postHeart);
-            return ResponseDto.success("좋아요를 등록했습니다.");
+        //optionalPostHeart에서 값이 없을때... (중복일때)
+        if (optionalPostHeart.isPresent()) { //값이 있을때.. true
+            throw new IllegalArgumentException("이미 좋아요를 눌렀습니다");
         }
 
-
-        return ResponseDto.fail("BAD_REQUEST", "좋아요 등록이 실패하였습니다.");
+        PostHeart postHeart = new PostHeart(requestDto); //
+        postHeartRepository.save(postHeart);
+        return ResponseDto.success("좋아요를 등록했습니다.");
     }
 
     public ResponseDto<?> deletePostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
