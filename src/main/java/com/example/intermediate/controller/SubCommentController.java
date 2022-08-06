@@ -40,4 +40,10 @@ public class SubCommentController {
         //service에 있는 메서드로 id,requestdto,request 값을 보냄
         return subCommentService.updateSubComment(subCommentId, requestDto, request);
     }
+
+    // 대댓글 삭제
+    @DeleteMapping("/api/auth/sub-comment/{subCommentId}")
+    public ResponseDto<?> deleteSubComment(@PathVariable Long subCommentId, HttpServletRequest request){
+        return subCommentService.deleteSubComment(subCommentId,request);
+    }
 }
