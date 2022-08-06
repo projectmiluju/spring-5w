@@ -21,14 +21,15 @@ public class PostHeartController {
     @PostMapping("/api/auth/postheart")
     public ResponseDto<?> createPostHeart(@RequestBody PostHeartRequestDto requestDto,
                                       @AuthenticationPrincipal UserDetails userDetails){
-        PostHeart postHeart = postHeartService.createPostHeart(requestDto,userDetails);
+//        PostHeart postHeart = postHeartService.createPostHeart(requestDto,userDetails);
 
-        if (postHeart == null) {
-            return ResponseDto.fail("POST_HEART_EXIST",
-                    "같은 게시글에 좋아요를 중복하여 누를 수 없습니다.");
-        }
+//        if (postHeart == null) {
+//            return ResponseDto.fail("POST_HEART_EXIST",
+//                    "같은 게시글에 좋아요를 중복하여 누를 수 없습니다.");
+//        }
 
-        return ResponseDto.success(postHeart);
+//        return ResponseDto.success(postHeart);
+        return postHeartService.createPostHeart(requestDto,userDetails); //신규코드
     }
 
     @DeleteMapping("/api/auth/postheart")
