@@ -1,6 +1,7 @@
 package com.example.intermediate.service;
 
 import com.example.intermediate.controller.request.PostHeartRequestDto;
+import com.example.intermediate.controller.response.ResponseDto;
 import com.example.intermediate.domain.Member;
 import com.example.intermediate.domain.Post;
 import com.example.intermediate.domain.PostHeart;
@@ -54,7 +55,7 @@ public class PostHeartService {
         return postHeartRepository.save(postHeart);
     }
 
-    public String deletePostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
+    public ResponseDto<?> deletePostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
 
         Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPostIdAndMemberId(
                 requestDto.getPostId(), requestDto.getMemberId());
@@ -68,9 +69,9 @@ public class PostHeartService {
 
             postHeartRepository.delete(optionalPostHeart.get());
 
-            return "success";
+            return ResponseDto.success("좋아요를 지우셨습니다.");
         }
 
-        return "fail";
+        return ResponseDto.fail("BAD_REQUEST","좋아요를 누르지 않으셨습니다.");
     }
 }
