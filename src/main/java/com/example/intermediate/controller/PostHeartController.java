@@ -34,8 +34,7 @@ public class PostHeartController {
     @DeleteMapping("/api/auth/postheart")
     public ResponseDto<?> deletePostHeart(@RequestBody PostHeartRequestDto requestDto,
                                           @AuthenticationPrincipal UserDetails userDetails){
-        String result = postHeartService.deletePostHeart(requestDto,userDetails);
 
-        return ResponseDto.success(result);
+        return postHeartService.deletePostHeart(requestDto,userDetails);
     }
 }
