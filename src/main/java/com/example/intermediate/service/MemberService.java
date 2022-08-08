@@ -169,16 +169,16 @@ public class MemberService {
             );
         }
         //좋아요 누른 댓글아이디찾기
-        List<CommentHeart> commentHearts = commentHeartRepository.findByMemberId(loginMember.getId());
+        List<CommentHeart> commentHearts = loginMember.getCommentHearts();
         List<CommentMypageResponseDto> heartComment = new ArrayList<>();
         for (CommentHeart commentHeart : commentHearts) {
             //좋아요 누른 댓글찾기
-            Optional<Comment> comment = commentRepository.findById(commentHeart.getCommentId());
+            Comment comment = commentHeart.getComment();
             heartComment.add(
                     CommentMypageResponseDto.builder()
-                            .commentId(comment.get().getId())
-                            .content(comment.get().getContent())
-                            .createdAt(comment.get().getCreatedAt())
+                            .commentId(comment.getId())
+                            .content(comment.getContent())
+                            .createdAt(comment.getCreatedAt())
                             .build()
             );
         }

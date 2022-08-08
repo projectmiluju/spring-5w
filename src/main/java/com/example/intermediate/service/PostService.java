@@ -96,7 +96,7 @@ public class PostService {
                 );
             }
 
-            int commentHeartCount = commentHeartRepository.findByCommentId(comment.getId()).size();
+            int commentHeartCount = comment.getCommentHearts().size();
             commentResponseDtoList.add(
                     CommentResponseDto.builder()
                             .id(comment.getId())

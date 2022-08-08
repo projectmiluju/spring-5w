@@ -100,7 +100,7 @@ public class CommentService {
                                 .build()
                 );
             }
-            int commentHeartCount = commentHeartRepository.findByCommentId(comment.getId()).size();
+            int commentHeartCount = comment.getCommentHearts().size(); //연관관계로 인한 수정
             commentResponseDtoList.add(
                     CommentResponseDto.builder()
                             .id(comment.getId())
