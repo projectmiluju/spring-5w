@@ -7,9 +7,7 @@ import com.example.intermediate.domain.Member;
 import com.example.intermediate.domain.Post;
 import com.example.intermediate.domain.SubComment;
 import com.example.intermediate.jwt.TokenProvider;
-import com.example.intermediate.repository.CommentRepository;
-import com.example.intermediate.repository.PostHeartRepository;
-import com.example.intermediate.repository.PostRepository;
+import com.example.intermediate.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +24,10 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final PostHeartRepository postHeartRepository;
+
+    private final CommentHeartRepository commentHeartRepository;
+
+    private final SubCommentHeartRepository subCommentHeartRepository;
 
     private final TokenProvider tokenProvider;
 
@@ -81,23 +83,26 @@ public class PostService {
             List<SubComment> subCommentList = comment.getSubComments();
             List<SubCommentResponseDto> subCommentResponseDtoList = new ArrayList<>();
             for (SubComment subComment : subCommentList) {
+                int subCommentHeartCount = subCommentHeartRepository.findBySubCommentId(subComment.getId()).size();
                 subCommentResponseDtoList.add(
                         SubCommentResponseDto.builder()
                                 .id(subComment.getId())
                                 .author(subComment.getMember().getNickname())
                                 .content(subComment.getContent())
+                                .subCommentHeartCount(subCommentHeartCount)
                                 .createdAt(subComment.getCreatedAt())
                                 .modifiedAt(subComment.getModifiedAt())
                                 .build()
                 );
             }
 
-
+            int commentHeartCount = commentHeartRepository.findByCommentId(comment.getId()).size();
             commentResponseDtoList.add(
                     CommentResponseDto.builder()
                             .id(comment.getId())
                             .author(comment.getMember().getNickname())
                             .content(comment.getContent())
+                            .commentHeartCount(commentHeartCount)
                             .subComments(subCommentResponseDtoList)
                             .createdAt(comment.getCreatedAt())
                             .modifiedAt(comment.getModifiedAt())

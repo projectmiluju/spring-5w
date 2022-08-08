@@ -7,8 +7,10 @@ import com.example.intermediate.controller.response.SubCommentResponseDto;
 import com.example.intermediate.domain.Comment;
 import com.example.intermediate.domain.Member;
 import com.example.intermediate.domain.SubComment;
+import com.example.intermediate.domain.SubCommentHeart;
 import com.example.intermediate.jwt.TokenProvider;
 import com.example.intermediate.repository.CommentRepository;
+import com.example.intermediate.repository.SubCommentHeartRepository;
 import com.example.intermediate.repository.SubCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SubCommentService {
-
     private final SubCommentRepository subCommentRepository; //대댓글 레포지토리 생성
 
     private final TokenProvider tokenProvider; //토큰을 생성하는
@@ -29,6 +30,8 @@ public class SubCommentService {
     private final CommentRepository commentRepository; //댓글 레포지토리 생성
 
     private final CommentService commentService;
+
+    private final SubCommentHeartRepository subCommentHeartRepository;
 
     @Transactional
     public ResponseDto<?> createSubComment(SubCommentRequestDto requestDto, HttpServletRequest request) {
@@ -82,11 +85,13 @@ public class SubCommentService {
         List<SubCommentResponseDto> responseDtoList = new ArrayList<>();
         // Comment에 연관관계로 저장된 SubComment 리스트를 불러와서 하나씩 실행
         for (SubComment subComment : comment.getSubComments()) {
+            int subCommentHeartCount = subCommentHeartRepository.findBySubCommentId(subComment.getId()).size();
             // SubComment -> SubCommentResponseDto 변환
             SubCommentResponseDto responseDto = SubCommentResponseDto.builder()
                     .id(subComment.getId())
                     .author(comment.getMember().getNickname())
                     .content(subComment.getContent())
+                    .subCommentHeartCount(subCommentHeartCount)
                     .createdAt(subComment.getCreatedAt())
                     .modifiedAt(subComment.getModifiedAt())
                     .build();
