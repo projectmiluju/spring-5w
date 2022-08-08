@@ -184,16 +184,16 @@ public class MemberService {
         }
 
         //좋아요 누른 대댓글아이디찾기
-        List<SubCommentHeart> subCommentHearts = subCommentHeartRepository.findByMemberId(loginMember.getId());
+        List<SubCommentHeart> subCommentHearts = loginMember.getSubCommentHearts();
         List<SubCommentMypageResponseDto> heartSubComment = new ArrayList<>();
         for ( SubCommentHeart subCommentHeart : subCommentHearts) {
             //좋아요 누른 대댓글찾기
-            Optional<SubComment> subComment = subCommentRepository.findById(subCommentHeart.getSubCommentId());
+            SubComment subComment = subCommentHeart.getSubComment();
             heartSubComment.add(
                     SubCommentMypageResponseDto.builder()
-                            .subCommentId(subComment.get().getId())
-                            .content(subComment.get().getContent())
-                            .createdAt(subComment.get().getCreatedAt())
+                            .subCommentId(subComment.getId())
+                            .content(subComment.getContent())
+                            .createdAt(subComment.getCreatedAt())
                             .build()
             );
         }

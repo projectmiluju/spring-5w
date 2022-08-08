@@ -83,7 +83,7 @@ public class PostService {
             List<SubComment> subCommentList = comment.getSubComments();
             List<SubCommentResponseDto> subCommentResponseDtoList = new ArrayList<>();
             for (SubComment subComment : subCommentList) {
-                int subCommentHeartCount = subCommentHeartRepository.findBySubCommentId(subComment.getId()).size();
+                int subCommentHeartCount = subComment.getSubCommentHearts().size();
                 subCommentResponseDtoList.add(
                         SubCommentResponseDto.builder()
                                 .id(subComment.getId())

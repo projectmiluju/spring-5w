@@ -85,7 +85,7 @@ public class SubCommentService {
         List<SubCommentResponseDto> responseDtoList = new ArrayList<>();
         // Comment에 연관관계로 저장된 SubComment 리스트를 불러와서 하나씩 실행
         for (SubComment subComment : comment.getSubComments()) {
-            int subCommentHeartCount = subCommentHeartRepository.findBySubCommentId(subComment.getId()).size();
+            int subCommentHeartCount = subComment.getSubCommentHearts().size();
             // SubComment -> SubCommentResponseDto 변환
             SubCommentResponseDto responseDto = SubCommentResponseDto.builder()
                     .id(subComment.getId())
