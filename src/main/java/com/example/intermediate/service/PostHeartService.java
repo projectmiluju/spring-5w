@@ -63,7 +63,7 @@ public class PostHeartService {
 
     public ResponseDto<?> deletePostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
 
-        Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPostIdAndMemberId(
+        Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPost_IdAndMember_Id(
                 requestDto.getPostId(), requestDto.getMemberId());
         //좋아요가 눌려있지 않다면
         if (optionalPostHeart.isEmpty()) {

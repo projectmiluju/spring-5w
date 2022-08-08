@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface PostHeartRepository extends JpaRepository<PostHeart, Long> {
     Optional<PostHeart> findByPostAndMember(Post post, Member member);
 
+    Optional<PostHeart> findByPost_IdAndMember_Id(Long postId, Long memberId);
+
     List<PostHeart> findByPostId(Long postId);
 
     long countByPostId(Long postId);
