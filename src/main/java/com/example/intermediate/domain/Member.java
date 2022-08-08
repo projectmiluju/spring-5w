@@ -33,7 +33,7 @@ public class Member extends Timestamped {
     @OneToMany(mappedBy="member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostHeart> postHearts;
 
-    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "member",fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true) //mappedbBy 맵핑되는 변수명작성
     private List<CommentHeart> commentHearts;
 
     @Override

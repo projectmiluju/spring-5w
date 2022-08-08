@@ -51,6 +51,7 @@ public class CommentHeartService {
         return ResponseDto.success("좋아요를 등록했습니다.");
     }
 
+    @Transactional
     public ResponseDto<?> deleteCommentHeart(CommentHeartRequestDto requestDto, UserDetails userDetails) {
 
         Optional<CommentHeart> optionalCommentHeart = commentHeartRepository.findByComment_IdAndMember_Id(
