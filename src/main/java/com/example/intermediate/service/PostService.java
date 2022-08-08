@@ -46,13 +46,14 @@ public class PostService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
+        //로그인 검사를 끝내고 게시글 작성
         Post post = Post.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
                 .member(member)
                 .build();
-        postRepository.save(post);
-        return ResponseDto.success(
+        postRepository.save(post); //DB에 저자
+        return ResponseDto.success( //responseDto에 저장후 리턴
                 PostResponseDto.builder()
                         .id(post.getId())
                         .title(post.getTitle())
@@ -71,8 +72,8 @@ public class PostService {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
 
-        List<Comment> commentList = commentRepository.findAllByPost(post);
-        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+        List<Comment> commentList = commentRepository.findAllByPost(post); //게시글 아이디로 댓글의 리스트 받기
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>(); //댓글을 담을 responseDto생성
 
         for (Comment comment : commentList) {
 

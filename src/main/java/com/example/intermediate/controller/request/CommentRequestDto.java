@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentRequestDto {
-    private Long postId;
-    private String content;
+    private Long postId; //게시판아이디
+    private String content; // 댓글 작성글
 }

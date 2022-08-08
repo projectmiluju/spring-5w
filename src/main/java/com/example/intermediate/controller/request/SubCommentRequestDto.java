@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubCommentRequestDto {
-    private Long commentId;
-    private String content;
+    private Long commentId; //댓글아이디
+    private String content; //대댓글 작성글
 }

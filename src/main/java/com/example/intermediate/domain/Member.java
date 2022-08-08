@@ -26,7 +26,7 @@ public class Member extends Timestamped {
     private String nickname;
 
     @Column(nullable = false)
-    @JsonIgnore
+    @JsonIgnore //데이터를 주고 받을때 결과값을 응답값에 보이지 않음
     private String password;
 
     @Override

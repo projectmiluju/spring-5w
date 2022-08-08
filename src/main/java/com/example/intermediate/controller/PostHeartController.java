@@ -18,6 +18,7 @@ public class PostHeartController {
 
     private final PostHeartService postHeartService;
 
+    //좋아요 등록
     @PostMapping("/api/auth/postheart")
     public ResponseDto<?> createPostHeart(@RequestBody PostHeartRequestDto requestDto,
                                       @AuthenticationPrincipal UserDetails userDetails){
@@ -32,6 +33,7 @@ public class PostHeartController {
         return postHeartService.createPostHeart(requestDto,userDetails); //신규코드
     }
 
+    //좋아요 삭제
     @DeleteMapping("/api/auth/postheart")
     public ResponseDto<?> deletePostHeart(@RequestBody PostHeartRequestDto requestDto,
                                           @AuthenticationPrincipal UserDetails userDetails){

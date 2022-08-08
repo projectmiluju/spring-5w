@@ -11,8 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostHeartRequestDto {
 
-    private Long postId;
+    private Long postId; //게시판아이디
 
-    private Long memberId;
+    private Long memberId; //회원아이디
 
 }
