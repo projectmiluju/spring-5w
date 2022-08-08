@@ -155,16 +155,16 @@ public class MemberService {
         Member loginMember = validateMember(request); //맴버의 아이디값, 닉네임, 패스워드
 
         //좋아요 누른 게시글아이디찾기
-        List<PostHeart> postHearts = postHeartRepository.findByMemberId(loginMember.getId());
+        List<PostHeart> postHearts = postHeartRepository.findByMember(loginMember);
         List<PostMypageResponseDto> heartPost = new ArrayList<>();
         for (PostHeart postHeart : postHearts) {
             //좋아요 누른 게시글찾기
-            Optional<Post> post = postRepository.findById(postHeart.getPostId());
+            Post post = postHeart.getPost();
             heartPost.add(
                     PostMypageResponseDto.builder()
-                            .postId(post.get().getId())
-                            .title(post.get().getTitle())
-                            .createdAt(post.get().getCreatedAt())
+                            .postId(post.getId())
+                            .title(post.getTitle())
+                            .createdAt(post.getCreatedAt())
                             .build()
             );
         }
