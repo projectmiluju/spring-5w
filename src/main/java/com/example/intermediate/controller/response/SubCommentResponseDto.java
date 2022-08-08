@@ -16,6 +16,9 @@ public class SubCommentResponseDto {
     private Long id;
     private String author;
     private String content;
+    //대댓글 좋아요
+    private int subCommentHeartCount;
+
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
