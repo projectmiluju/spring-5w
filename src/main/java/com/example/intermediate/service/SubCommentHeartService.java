@@ -59,9 +59,9 @@ public class SubCommentHeartService {
         if (optionalSubCommentHeart.isEmpty()) {
             throw new IllegalArgumentException("좋아요를 누르지 않으셨습니다.");
         }
-        Optional<Member> membercheck = memberRepository.findById(requestDto.getMemberId());
+        Member membercheck = optionalSubCommentHeart.get().getMember();
         //누른게 로그인한 사람이 아니라면
-        if (!userDetails.getUsername().equals(membercheck.get().getNickname())) {
+        if (!userDetails.getUsername().equals(membercheck.getNickname())) {
             throw new IllegalArgumentException("일치하는 회원이 아닙니다");
         }
         subCommentHeartRepository.delete(optionalSubCommentHeart.get());
