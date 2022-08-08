@@ -19,7 +19,7 @@ public class SubCommentHeartService {
     private final SubCommentRepository subCommentRepository;
     private final MemberRepository memberRepository;
 
-    public ResponseDto<?> creatSubCommentHeart(SubCommentHeartRequestDto requestDto, UserDetails userDetails){
+    public ResponseDto<?> creatSubCommentHeart(SubCommentHeartRequestDto requestDto, UserDetails userDetails) {
         // 댓글이 존재하는지 여부
         Optional<SubComment> subCommentCheck = subCommentRepository.findById(requestDto.getSubCommentId());
         if (subCommentCheck.isEmpty()) {
@@ -35,21 +35,25 @@ public class SubCommentHeartService {
             throw new IllegalArgumentException("일치하는 회원이 아닙니다");
         }
         // 사용자가 같은 대댓글에 중복으로 눌렀는지 검사
-        Optional<SubCommentHeart> optionalSubCommentHeart = subCommentHeartRepository.findBySubCommentIdAndMemberId(
-                requestDto.getSubCommentId(), requestDto.getMemberId());
+        Optional<SubCommentHeart> optionalSubCommentHeart = subCommentHeartRepository.findBySubCommentAndMember(
+                subCommentCheck.get(), membercheck.get());
         //optionalSubCommentHeart에서 값이 없을때... (중복일때)
         if (optionalSubCommentHeart.isPresent()) { //값이 있을때.. true
             throw new IllegalArgumentException("이미 좋아요를 눌렀습니다");
         }
 
-        SubCommentHeart subCommentHeart = new SubCommentHeart(requestDto); //
+        // SubCommentHeart 객체 생성
+        SubCommentHeart subCommentHeart = SubCommentHeart.builder()
+                .subComment(subCommentCheck.get())
+                .member(membercheck.get())
+                .build();
         subCommentHeartRepository.save(subCommentHeart);
         return ResponseDto.success("좋아요를 등록했습니다.");
     }
 
     public ResponseDto<?> deleteSubCommentHeart(SubCommentHeartRequestDto requestDto, UserDetails userDetails) {
 
-        Optional<SubCommentHeart> optionalSubCommentHeart = subCommentHeartRepository.findBySubCommentIdAndMemberId(
+        Optional<SubCommentHeart> optionalSubCommentHeart = subCommentHeartRepository.findBySubComment_IdAndMember_Id(
                 requestDto.getSubCommentId(), requestDto.getMemberId());
         //좋아요가 눌려있지 않다면
         if (optionalSubCommentHeart.isEmpty()) {
