@@ -29,11 +29,15 @@ public class Comment extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY) //게시글하나에 댓글이 여러개 연관관계
     private Post post;
 
+
     @Column(nullable = false)
     private String content;
 
     @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true) //댓글하나에 대댓글 여러개 연관관계
     private List<SubComment> subComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentHeart> commentHearts;
 
 
     public void update(CommentRequestDto commentRequestDto) {

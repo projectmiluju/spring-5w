@@ -33,6 +33,9 @@ public class Member extends Timestamped {
     @OneToMany(mappedBy="member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostHeart> postHearts;
 
+    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<CommentHeart> commentHearts;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
