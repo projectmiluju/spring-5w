@@ -22,12 +22,12 @@ public class CommentHeart extends Timestamped {
     private Long id;
 
      @JoinColumn(name = "member_id", nullable = false)
-     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+     @ManyToOne(fetch = FetchType.LAZY)  //회원하나에 댓글 여러개
+    private Member member; //연관관계를 위해 객체 생성
 
      @JoinColumn(name = "comment_id", nullable = false)
-     @ManyToOne(fetch = FetchType.LAZY)
-    private Comment comment;
+     @ManyToOne(fetch = FetchType.LAZY) //댓글하나에 좋아요 여러개
+    private Comment comment; //연관관계를 위해 객체생성
 
 //    public CommentHeart(CommentHeartRequestDto requestDto) {
 //        this.memberId = requestDto.getMemberId();
