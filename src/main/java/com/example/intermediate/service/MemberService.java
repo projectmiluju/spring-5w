@@ -151,11 +151,12 @@ public class MemberService {
     }
 
     //마이페이지
+    @Transactional(readOnly = true)
     public ResponseDto<?> getMyPage(HttpServletRequest request) {
         Member loginMember = validateMember(request); //맴버의 아이디값, 닉네임, 패스워드
 
         //좋아요 누른 게시글아이디찾기
-        List<PostHeart> postHearts = loginMember.getPostHearts();
+        List<PostHeart> postHearts = postHeartRepository.findByMember(loginMember);
         List<PostMypageResponseDto> heartPost = new ArrayList<>();
         for (PostHeart postHeart : postHearts) {
             //좋아요 누른 게시글찾기
@@ -169,7 +170,7 @@ public class MemberService {
             );
         }
         //좋아요 누른 댓글아이디찾기
-        List<CommentHeart> commentHearts = loginMember.getCommentHearts();
+        List<CommentHeart> commentHearts = commentHeartRepository.findByMember(loginMember);
         List<CommentMypageResponseDto> heartComment = new ArrayList<>();
         for (CommentHeart commentHeart : commentHearts) {
             //좋아요 누른 댓글찾기
@@ -184,7 +185,7 @@ public class MemberService {
         }
 
         //좋아요 누른 대댓글아이디찾기
-        List<SubCommentHeart> subCommentHearts = loginMember.getSubCommentHearts();
+        List<SubCommentHeart> subCommentHearts = subCommentHeartRepository.findByMember(loginMember);
         List<SubCommentMypageResponseDto> heartSubComment = new ArrayList<>();
         for ( SubCommentHeart subCommentHeart : subCommentHearts) {
             //좋아요 누른 대댓글찾기
