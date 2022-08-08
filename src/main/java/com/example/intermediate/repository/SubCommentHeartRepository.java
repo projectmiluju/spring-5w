@@ -12,4 +12,6 @@ public interface SubCommentHeartRepository extends JpaRepository<SubCommentHeart
     List<SubCommentHeart> findBySubCommentId(Long subCommentId);
 
     long countBySubCommentId(Long subCommentId);
+
+    List<SubCommentHeart> findByMemberId(Long memberId);
 }
