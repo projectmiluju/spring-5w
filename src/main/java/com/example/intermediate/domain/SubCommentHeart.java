@@ -23,12 +23,8 @@ public class SubCommentHeart extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @JoinColumn(name = "subcomment_id", nullable = false)
+    @JoinColumn(name = "sub_comment_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private SubComment subComment;
 
-    public SubCommentHeart(Member member, SubComment subComment) {
-        this.member = member;
-        this.subComment = subComment;
-    }
 }

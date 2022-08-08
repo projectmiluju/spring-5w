@@ -28,7 +28,7 @@ public class SubComment extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY) //댓글 하나에 대댓글 여러개
     private Comment comment;
 
-    @OneToMany(mappedBy="subcomment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="subComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubCommentHeart> subCommentHearts;
 
     @Column(nullable = false)
