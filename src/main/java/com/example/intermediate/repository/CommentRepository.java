@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByPost(Post post);
+
+    List<Comment> findByMember_Id(Long memberId);
 }
