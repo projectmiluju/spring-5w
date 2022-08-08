@@ -28,6 +28,7 @@ public class CommentService {
     private final TokenProvider tokenProvider;
     private final PostService postService;
 
+    //댓글 생성 메서드
     @Transactional
     public ResponseDto<?> createComment(CommentRequestDto requestDto, HttpServletRequest request) {
         if (null == request.getHeader("Refresh-Token")) {
@@ -66,7 +67,8 @@ public class CommentService {
                         .build()
         );
     }
-
+    
+    //댓글 조회 메서드
     @Transactional(readOnly = true)
     public ResponseDto<?> getAllCommentsByPost(Long postId) {
         Post post = postService.isPresentPost(postId);
@@ -180,12 +182,14 @@ public class CommentService {
         return ResponseDto.success("success");
     }
 
+    //댓글이 있는지 확인하는 메서드
     @Transactional(readOnly = true)
     public Comment isPresentComment(Long id) {
         Optional<Comment> optionalComment = commentRepository.findById(id);
         return optionalComment.orElse(null);
     }
 
+    //리프레쉬 토큰값이 있는지 확인하는 메서드
     @Transactional
     public Member validateMember(HttpServletRequest request) {
         if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {

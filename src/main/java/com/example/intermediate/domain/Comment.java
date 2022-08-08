@@ -22,17 +22,17 @@ public class Comment extends Timestamped {
     private Long id;
 
     @JoinColumn(name = "member_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) //맴버 하나에 댓글이 여러개 연관관계
     private Member member;
 
     @JoinColumn(name = "post_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) //게시글하나에 댓글이 여러개 연관관계
     private Post post;
 
     @Column(nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true) //댓글하나에 대댓글 여러개 연관관계
     private List<SubComment> subComments = new ArrayList<>();
 
 

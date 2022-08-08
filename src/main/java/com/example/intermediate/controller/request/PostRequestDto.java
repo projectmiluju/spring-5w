@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostRequestDto {
-    private String title;
-    private String content;
+    private String title; //게시판 제목
+    private String content; //게시판 작성글
 }
