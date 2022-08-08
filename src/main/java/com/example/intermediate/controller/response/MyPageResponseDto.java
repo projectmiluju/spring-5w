@@ -21,4 +21,7 @@ public class MyPageResponseDto {
     private List<SubCommentMypageResponseDto> mySubComments;
 
     // 좋아요한 게시글/댓글/대댓글
+    private List<PostMypageResponseDto> heartPostResponse;
+    private List<CommentMypageResponseDto> heartCommentResponse;
+    private List<SubCommentMypageResponseDto> heartSubCommentResponse;
 }

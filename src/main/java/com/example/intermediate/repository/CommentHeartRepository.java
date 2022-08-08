@@ -12,4 +12,6 @@ public interface CommentHeartRepository extends JpaRepository<CommentHeart, Long
     List<CommentHeart> findByCommentId(Long commentId);
 
     long countByCommentId(Long commentId);
+
+    List<CommentHeart> findByMemberId(Long memberId);
 }

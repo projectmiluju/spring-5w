@@ -9,15 +9,9 @@ import com.example.intermediate.controller.response.ResponseDto;
 import com.example.intermediate.controller.response.mypage.CommentMypageResponseDto;
 import com.example.intermediate.controller.response.mypage.PostMypageResponseDto;
 import com.example.intermediate.controller.response.mypage.SubCommentMypageResponseDto;
-import com.example.intermediate.domain.Comment;
-import com.example.intermediate.domain.Member;
-import com.example.intermediate.domain.Post;
-import com.example.intermediate.domain.SubComment;
+import com.example.intermediate.domain.*;
 import com.example.intermediate.jwt.TokenProvider;
-import com.example.intermediate.repository.CommentRepository;
-import com.example.intermediate.repository.MemberRepository;
-import com.example.intermediate.repository.PostRepository;
-import com.example.intermediate.repository.SubCommentRepository;
+import com.example.intermediate.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,9 +33,17 @@ public class MemberService {
     //  private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
 
-    private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
-    private final SubCommentRepository subCommentRepository;
+    private final PostRepository postRepository; //게시글 repo
+
+    private final CommentRepository commentRepository; //댓글 repo
+
+    private final SubCommentRepository subCommentRepository; //대댓글 repo
+
+    private final PostHeartRepository postHeartRepository; //게시글 좋아요 repo
+
+    private final CommentHeartRepository commentHeartRepository; //댓글 좋아요 repo
+
+    private final SubCommentHeartRepository subCommentHeartRepository; //대댓글 좋아요 repo
 
     @Transactional
     public ResponseDto<?> createMember(MemberRequestDto requestDto) {
@@ -148,8 +150,54 @@ public class MemberService {
         response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
+    //마이페이지
     public ResponseDto<?> getMyPage(HttpServletRequest request) {
-        Member loginMember = validateMember(request);
+        Member loginMember = validateMember(request); //맴버의 아이디값, 닉네임, 패스워드
+
+        //좋아요 누른 게시글아이디찾기
+        List<PostHeart> postHearts = postHeartRepository.findByMemberId(loginMember.getId());
+        List<PostMypageResponseDto> heartPost = new ArrayList<>();
+        for (PostHeart postHeart : postHearts) {
+            //좋아요 누른 게시글찾기
+            Optional<Post> post = postRepository.findById(postHeart.getPostId());
+            heartPost.add(
+                    PostMypageResponseDto.builder()
+                            .postId(post.get().getId())
+                            .title(post.get().getTitle())
+                            .createdAt(post.get().getCreatedAt())
+                            .build()
+            );
+        }
+        //좋아요 누른 댓글아이디찾기
+        List<CommentHeart> commentHearts = commentHeartRepository.findByMemberId(loginMember.getId());
+        List<CommentMypageResponseDto> heartComment = new ArrayList<>();
+        for (CommentHeart commentHeart : commentHearts) {
+            //좋아요 누른 댓글찾기
+            Optional<Comment> comment = commentRepository.findById(commentHeart.getCommentId());
+            heartComment.add(
+                    CommentMypageResponseDto.builder()
+                            .commentId(comment.get().getId())
+                            .content(comment.get().getContent())
+                            .createdAt(comment.get().getCreatedAt())
+                            .build()
+            );
+        }
+
+        //좋아요 누른 대댓글아이디찾기
+        List<SubCommentHeart> subCommentHearts = subCommentHeartRepository.findByMemberId(loginMember.getId());
+        List<SubCommentMypageResponseDto> heartSubComment = new ArrayList<>();
+        for ( SubCommentHeart subCommentHeart : subCommentHearts) {
+            //좋아요 누른 대댓글찾기
+            Optional<SubComment> subComment = subCommentRepository.findById(subCommentHeart.getSubCommentId());
+            heartSubComment.add(
+                    SubCommentMypageResponseDto.builder()
+                            .subCommentId(subComment.get().getId())
+                            .content(subComment.get().getContent())
+                            .createdAt(subComment.get().getCreatedAt())
+                            .build()
+            );
+        }
+
 
         List<Post> postList = postRepository.findByMember_Id(loginMember.getId());
         List<PostMypageResponseDto> myPostsResponseDtoList = new ArrayList<>();
@@ -189,6 +237,9 @@ public class MemberService {
         }
 
         MyPageResponseDto responseDto = MyPageResponseDto.builder()
+                .heartPostResponse(heartPost)
+                .heartCommentResponse(heartComment)
+                .heartSubCommentResponse(heartSubComment)
                 .myPosts(myPostsResponseDtoList)
                 .myComments(myCommentsResponseDtoList)
                 .mySubComments(mySubCommentsResponseDtoList)
