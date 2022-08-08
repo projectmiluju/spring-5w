@@ -13,9 +13,5 @@ public interface PostHeartRepository extends JpaRepository<PostHeart, Long> {
 
     Optional<PostHeart> findByPost_IdAndMember_Id(Long postId, Long memberId);
 
-    List<PostHeart> findByPostId(Long postId);
-
-    long countByPostId(Long postId);
-
     List<PostHeart> findByMemberId(Long memberId);
 }
