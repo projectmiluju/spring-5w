@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Builder
@@ -28,6 +29,9 @@ public class Member extends Timestamped {
     @Column(nullable = false)
     @JsonIgnore //데이터를 주고 받을때 결과값을 응답값에 보이지 않음
     private String password;
+
+    @OneToMany(mappedBy="member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostHeart> postHearts;
 
     @Override
     public boolean equals(Object o) {

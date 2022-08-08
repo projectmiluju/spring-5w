@@ -110,7 +110,7 @@ public class PostService {
             );
         }
 
-        int postHeartCount = postHeartRepository.findByPostId(id).size();
+        int postHeartCount = post.getPostHearts().size();
 
         return ResponseDto.success(
                 PostResponseDto.builder()
@@ -137,7 +137,7 @@ public class PostService {
             // 게시글 아이디
             Long postId = post.getId();
             // 좋아요 개수 세기
-            long postHeartCount = postHeartRepository.countByPostId(postId);
+            long postHeartCount = post.getPostHearts().size();
             // 요구사항에 맞는 ResponseDto로 변환
             PostListResponseDto postListResponseDto = new PostListResponseDto(post, postHeartCount);
             // 결과 저장 리스트에 담기
