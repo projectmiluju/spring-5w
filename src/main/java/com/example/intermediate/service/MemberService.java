@@ -155,7 +155,7 @@ public class MemberService {
         Member loginMember = validateMember(request); //맴버의 아이디값, 닉네임, 패스워드
 
         //좋아요 누른 게시글아이디찾기
-        List<PostHeart> postHearts = postHeartRepository.findByMember(loginMember);
+        List<PostHeart> postHearts = loginMember.getPostHearts();
         List<PostMypageResponseDto> heartPost = new ArrayList<>();
         for (PostHeart postHeart : postHearts) {
             //좋아요 누른 게시글찾기

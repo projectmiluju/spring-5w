@@ -61,6 +61,7 @@ public class PostHeartService {
         return ResponseDto.success("좋아요를 등록했습니다.");
     }
 
+    @Transactional
     public ResponseDto<?> deletePostHeart(PostHeartRequestDto requestDto, UserDetails userDetails) {
 
         Optional<PostHeart> optionalPostHeart = postHeartRepository.findByPost_IdAndMember_Id(
