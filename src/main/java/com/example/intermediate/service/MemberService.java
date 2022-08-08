@@ -184,7 +184,7 @@ public class MemberService {
         }
 
         //좋아요 누른 대댓글아이디찾기
-        List<SubCommentHeart> subCommentHearts = subCommentHeartRepository.findByMember(loginMember);
+        List<SubCommentHeart> subCommentHearts = loginMember.getSubCommentHearts();
         List<SubCommentMypageResponseDto> heartSubComment = new ArrayList<>();
         for ( SubCommentHeart subCommentHeart : subCommentHearts) {
             //좋아요 누른 대댓글찾기

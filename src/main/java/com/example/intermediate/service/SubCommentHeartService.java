@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -19,6 +20,7 @@ public class SubCommentHeartService {
     private final SubCommentRepository subCommentRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public ResponseDto<?> creatSubCommentHeart(SubCommentHeartRequestDto requestDto, UserDetails userDetails) {
         // 댓글이 존재하는지 여부
         Optional<SubComment> subCommentCheck = subCommentRepository.findById(requestDto.getSubCommentId());
@@ -51,6 +53,7 @@ public class SubCommentHeartService {
         return ResponseDto.success("좋아요를 등록했습니다.");
     }
 
+    @Transactional
     public ResponseDto<?> deleteSubCommentHeart(SubCommentHeartRequestDto requestDto, UserDetails userDetails) {
 
         Optional<SubCommentHeart> optionalSubCommentHeart = subCommentHeartRepository.findBySubComment_IdAndMember_Id(
