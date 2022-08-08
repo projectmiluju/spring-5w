@@ -13,7 +13,6 @@ public interface SubCommentHeartRepository extends JpaRepository<SubCommentHeart
 
     Optional<SubCommentHeart> findBySubComment_IdAndMember_Id(Long subCommentId,Long memberId);
 
-    List<SubCommentHeart> findBySubComment_Id(Long subCommentId);
+    List<SubCommentHeart> findByMemberId(Long memberId);
 
-    List<SubCommentHeart> findByMember(Member member);
 }
