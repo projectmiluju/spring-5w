@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @Getter
@@ -26,6 +27,9 @@ public class SubComment extends Timestamped {
     @JoinColumn(name = "comment_id", nullable = false) //연관관계
     @ManyToOne(fetch = FetchType.LAZY) //댓글 하나에 대댓글 여러개
     private Comment comment;
+
+    @OneToMany(mappedBy="subcomment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubCommentHeart> subCommentHearts;
 
     @Column(nullable = false)
     private String content;
