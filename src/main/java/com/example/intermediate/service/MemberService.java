@@ -4,6 +4,7 @@ import com.example.intermediate.controller.request.LoginRequestDto;
 import com.example.intermediate.controller.request.MemberRequestDto;
 import com.example.intermediate.controller.request.TokenDto;
 import com.example.intermediate.controller.response.MemberResponseDto;
+import com.example.intermediate.controller.response.MyPageResponseDto;
 import com.example.intermediate.controller.response.ResponseDto;
 import com.example.intermediate.domain.Member;
 import com.example.intermediate.jwt.TokenProvider;
@@ -132,4 +133,21 @@ public class MemberService {
         response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
+    public ResponseDto<?> getMyPage(HttpServletRequest request) {
+        Member loginMember = validateMember(request);
+
+        MyPageResponseDto responseDto = MyPageResponseDto.builder()
+                .build();
+
+        return ResponseDto.success(responseDto);
+    }
+
+    //리프레쉬 토큰값이 있는지 확인하는 메서드
+    @Transactional
+    public Member validateMember(HttpServletRequest request) {
+        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+            return null;
+        }
+        return tokenProvider.getMemberFromAuthentication();
+    }
 }
