@@ -30,15 +30,6 @@ public class Member extends Timestamped {
     @JsonIgnore //데이터를 주고 받을때 결과값을 응답값에 보이지 않음
     private String password;
 
-    @OneToMany(mappedBy="member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostHeart> postHearts;
-
-    @OneToMany(mappedBy = "member",fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true) //mappedbBy 맵핑되는 변수명작성
-    private List<CommentHeart> commentHearts;
-
-    @OneToMany(mappedBy="member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SubCommentHeart> subCommentHearts;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
