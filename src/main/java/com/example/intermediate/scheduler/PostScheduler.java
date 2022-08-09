@@ -1,4 +1,4 @@
-package com.example.intermediate;
+package com.example.intermediate.scheduler;
 
 import com.example.intermediate.domain.Post;
 import com.example.intermediate.repository.PostRepository;
