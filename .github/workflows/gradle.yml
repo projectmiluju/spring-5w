@@ -7,9 +7,9 @@
 name: Java CI with Gradle
 on:
   push:
-    branches: [ "github_action/wonyong" ]
+    branches: [ "gitaction/wonyong" ]
   pull_request:
-    branches: [ "github_action/wonyong" ]
+    branches: [ "gitaction/wonyong" ]
 permissions:
   contents: read
 env:
