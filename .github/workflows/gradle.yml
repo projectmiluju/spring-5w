@@ -45,7 +45,7 @@ jobs:
 
           # appspec.yml Copy
       - name: Copy appspec
-        run: cp appspec.yml ./deploy/
+        run: cp ./appspec.yml ./deploy/
 
       - name: Make zip file
         run: zip -r ./$GITHUB_SHA.zip .
